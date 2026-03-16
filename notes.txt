@@ -1,14 +1,1 @@
-step 1-------> activate virtual environment with all requirements 
-step 2-------> use this command to synthesize the output
 
-    python generate.py \
-  --restore_step steps \
-  --mode single \
-  --text "Enter the desired text" \
- --speaker_emb embeddings/LibriTTS/1.pt \
-  -p config/LibriTTS/preprocess.yaml \
-  -m config/LibriTTS/model.yaml \
-  -t config/LibriTTS/train.yaml \
-  --pitch_control 1.0 \
-  --energy_control 1.0 \
-  --duration_control 1.0
