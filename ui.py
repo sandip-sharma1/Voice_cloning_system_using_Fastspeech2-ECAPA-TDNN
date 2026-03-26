@@ -108,7 +108,6 @@ def full_pipeline(audio_path, speaker_id, output_dir=SEEN_DIR):
     model.eval()
     with torch.no_grad():
         embedding = speaker_embedding_extractor(model, audio.unsqueeze(0))
-    embedding = torch.nn.functional.normalize(embedding, p=2, dim=1)
 
     torch.save(embedding.cpu(), out_pt)
     return out_wav, out_pt, embedding
