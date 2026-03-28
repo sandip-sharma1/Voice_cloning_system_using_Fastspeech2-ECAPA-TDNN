@@ -10,11 +10,11 @@ def convert_ecapa_to_pt(ecapa_path: str):
     Convert a single .ecapa_averaged_embedding file to .pt
     """
     if not os.path.exists(ecapa_path):
-        print(f" Error: File not found!\n   {ecapa_path}")
+        print(f"❌ Error: File not found!\n   {ecapa_path}")
         return False
 
     if not ecapa_path.endswith(".ecapa_averaged_embedding"):
-        print(" Error: File must end with .ecapa_averaged_embedding")
+        print("❌ Error: File must end with .ecapa_averaged_embedding")
         return False
 
     # Create new .pt path in the same folder
@@ -37,7 +37,7 @@ def convert_ecapa_to_pt(ecapa_path: str):
         # Save as .pt
         torch.save(embedding, pt_path)
 
-        print(" Conversion Successful!")
+        print("✅ Conversion Successful!")
         print(f"   From : {filename}")
         print(f"   To   : {os.path.basename(pt_path)}")
         print(f"   Path : {pt_path}")
@@ -47,7 +47,7 @@ def convert_ecapa_to_pt(ecapa_path: str):
         return True
 
     except Exception as e:
-        print(f" Conversion Failed: {e}")
+        print(f"❌ Conversion Failed: {e}")
         return False
 
 
