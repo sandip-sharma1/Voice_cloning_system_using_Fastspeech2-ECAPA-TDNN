@@ -10,6 +10,7 @@ ECAPA-TDNN — State-of-the-art speaker embedding model to capture speaker ident
 This repository integrates TTS and speaker embedding models to clone a given speaker’s voice using a few reference utterances.
 
 Features
+
 --->Multi-speaker text-to-speech synthesis
 --->Non-autoregressive TTS (fast inference & training)
 --->Speaker identity capture via ECAPA-TDNN embeddings
