@@ -1,143 +1,113 @@
- ”A neural approach to multi-speaker voice cloning in english using fastspeech2 with ecapa-tdnn speaker representations”
+Voice Cloning System using FastSpeech2 & ECAPA-TDNN
 
-Demo:
+Demo on LinkedIn:https://www.linkedin.com/posts/sandip-sharma-0a7b98324_voicecloning-texttospeech-deeplearning-ugcPost-7446263735419297792-gEgC?utm_source=share&utm_medium=member_ios&rcm=ACoAAFILk38BbQv--mhT2lmnolKhkqoXrAor67k
 
-A complete voice cloning / multi-speaker text-to-speech (TTS) system that uses:
-
-FastSpeech2 — Non-autoregressive TTS model for faster, high-quality speech generation.
-ECAPA-TDNN — State-of-the-art speaker embedding model to capture speaker identity features.
-
-This repository integrates TTS and speaker embedding models to clone a given speaker’s voice using a few reference utterances.
+A complete multi-speaker voice cloning and text-to-speech (TTS) system that leverages FastSpeech2 for high-quality, non-autoregressive speech synthesis and ECAPA-TDNN for robust speaker embeddings. This repository allows cloning a speaker’s voice using only a few reference utterances.
 
 Features
 
---->Multi-speaker text-to-speech synthesis
---->Non-autoregressive TTS (fast inference & training)
---->Speaker identity capture via ECAPA-TDNN embeddings
---->Supports training, inference, evaluation, and similarity comparison
---->Includes utilities for preprocessing, alignment, and demo UI
+Multi-speaker TTS: Synthesize speech in multiple voices.
+Non-autoregressive TTS: Fast and parallel inference for high-quality speech.
+Speaker identity capture: Use ECAPA-TDNN embeddings to preserve speaker characteristics.
+End-to-end workflow: Supports data preprocessing, model training, inference, evaluation, and voice similarity analysis.
+Demo UI: Simple interface for testing and synthesizing speech interactively.
 
-Repository Contents
+Repository Structure
 
-audio/ - audio preprocessing
-config/ - Hyperparameters and config files
-ecapa/ - ECAPA-TDNN speaker encoder
-embeddings/ - Precomputed speaker embeddings
-hifigan/ - Neural vocoder for waveform synthesis
-lexicon/ - Phoneme lexicon
-model/ - FastSpeech2 model definitions
-similarity/ - Voice similarity metrics & utils
-text/ - Text processing utilities
-transformer/ - Transformer models & support
-unseenembeddings/ - Unseen speaker embeddings support
-utils/ - Shared utilities
-train.py - Train TTS + speaker models
-generate.py - Inference for speech synthesis
-evaluate.py - Evaluation scripts
-ui.py - Simple UI for demo/testing
-requirements-*.txt - Requirements for Linux/Windows
-README.md - This file
+audio/                # Audio preprocessing utilities
+config/               # Hyperparameters and configuration files
+ecapa/                # ECAPA-TDNN speaker encoder
+embeddings/           # Precomputed speaker embeddings
+hifigan/              # HiFi-GAN vocoder for waveform synthesis
+lexicon/              # Phoneme lexicon
+model/                # FastSpeech2 model definitions
+similarity/           # Voice similarity metrics and utilities
+text/                 # Text processing utilities
+transformer/          # Transformer models and support
+unseenembeddings/     # Support for unseen speaker embeddings
+utils/                # Shared utilities
+train.py              # Train TTS and speaker models
+generate.py           # Speech synthesis / inference
+evaluate.py           # Evaluation scripts
+ui.py                 # Demo UI for testing
+requirements-*.txt    # System dependencies
+README.md             # Documentation (this file)
 
 Installation
 
 Clone the repository:
 
 git clone https://github.com/sandip-sharma1/Voice_cloning_system_using_Fastspeech2-ECAPA-TDNN.git
-
 cd Voice_cloning_system_using_Fastspeech2-ECAPA-TDNN
 
-Setup Python environment:
+Set up a Python virtual environment:
 
 python -m venv venv
-source venv/bin/activate # Linux / macOS
-venv\Scripts\activate # Windows
+# Activate environment
+source venv/bin/activate   # Linux / macOS
+venv\Scripts\activate      # Windows
 
-pip install -r requirements-linux.txt # Or requirements-windows.txt
+Install dependencies:
 
-Model Details
+pip install -r requirements-linux.txt  # Linux
+pip install -r requirements-windows.txt # Windows
 
-FastSpeech2 (Text-to-Speech):
+Model Overview
 
---->Non-autoregressive architecture
---->Fast, parallel speech generation
---->Predicts mel-spectrogram from text input
---->Requires an aligned dataset for training (phoneme durations, etc.)
+FastSpeech2 (TTS)
+Non-autoregressive architecture for fast, parallel speech generation.
+Predicts mel-spectrograms from text input.
+Requires aligned datasets for training (phoneme durations, etc.).
 
-ECAPA-TDNN (Speaker Embeddings):
 
---->Extracts robust speaker identity features from audio
---->Helps clone voice characteristics across speakers
---->Achieves strong performance in speaker recognition tasks
+ECAPA-TDNN (Speaker Embeddings)
+Extracts speaker identity features from reference audio.
+Enables accurate voice cloning across multiple speakers.
+High performance in speaker recognition tasks.
+
 
 Usage
+1. Prepare alignment
+python ./prepare_align.py ./config/LibriTTS/preprocess.yaml
 
-steps to use this repo:
-1) Clone the repository:
+2. Preprocess dataset
+python ./preprocess.py ./config/LibriTTS/preprocess.yaml
 
-2) prepare_align
-   run : python ./prepare_align.py ./config/LibriTTS/preprocess.yaml
+3. Train model
+python ./train.py -p ./config/LibriTTS/preprocess.yaml \
+                  -m ./config/LibriTTS/model.yaml \
+                  -t ./config/LibriTTS/train.yaml
 
-3) Preprocess data
-  run:python ./preprocess.py ./config/LibriTTS/preprocess.yaml
+4. Inference / Generate speech
+python generate.py --restore_step 500000 \
+                   --mode single \
+                   --text "Thank you" \
+                   --speaker_emb embeddings/LibriTTS/1.pt \
+                   -p config/LibriTTS/preprocess.yaml \
+                   -m config/LibriTTS/model.yaml \
+                   -t config/LibriTTS/train.yaml \
+                   --pitch_control 1.0 \
+                   --energy_control 1.0 \
+                   --duration_control 1.0
 
-4) Train the model
-  run:python ./train.py                        ^
-    -p ./config/LibriTTS/preprocess.yaml ^
-    -m ./config/LibriTTS/model.yaml      ^
-    -t ./config/LibriTTS/train.yaml
-
-5) inference
-  run:python generate.py \
-  --restore_step 500000 \
-  --mode single \
-  --text "Thank you" \
- --speaker_emb embeddings/LibriTTS/1.pt \
-  -p config/LibriTTS/preprocess.yaml \
-  -m config/LibriTTS/model.yaml \
-  -t config/LibriTTS/train.yaml \
-  --pitch_control 1.0 \
-  --energy_control 1.0 \
-  --duration_control 1.0
-
-
-Modify config files for your dataset paths and hyperparameters.
-
-
-Datasets
-
-Supported datasets include:
-
-LibriTTS — Clean, multi-speaker TTS dataset
-Additional high-quality speech collections can be adapted
-
-Ensure audio is sampled at consistent rate (e.g., 22050 Hz or 24 kHz) and aligned with text transcripts.
-
---->UI
-
-Run a simple demo UI:
-
+5. Launch Demo UI
 python ui.py
 
-This provides options to load models, select reference voice, and synthesize speech.
+Supported Datasets:
+
+LibriTTS – clean, multi-speaker TTS dataset.
+Additional high-quality datasets can be adapted.
+Ensure consistent sampling rate (e.g., 22,050 Hz) and aligned transcripts.
 
 Tips & Notes
---->Precompute speaker embeddings before synthesis.
---->Ensure phoneme alignment for training TTS model.
---->Use a vocoder like HiFi-GAN for waveform reconstruction.
---->Training on clean, high-quality data yields better voice cloning.
-
---->Requirements
-See:
-
-requirements-linux.txt
-requirements-windows.txt
-
-Install all dependencies before training or inference.
+Precompute speaker embeddings before inference.
+Ensure phoneme alignment during TTS training for best results.
+Use HiFi-GAN vocoder for waveform synthesis.
+Training on clean, high-quality data improves voice cloning accuracy.
+Modify config/ files to match dataset paths and hyperparameters.
 
 
 Acknowledgements
---->FastSpeech2 TTS research by Microsoft
---->ECAPA-TDNN speaker embedding model architecture
---->Open-source community for datasets & training utilities
-
-
+FastSpeech2 — Microsoft Research
+ECAPA-TDNN — State-of-the-art speaker embedding model
+Open-source community contributions for datasets and training utilities
