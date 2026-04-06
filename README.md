@@ -1,6 +1,6 @@
  ”A neural approach to multi-speaker voice cloning in english using fastspeech2 with ecapa-tdnn speaker representations”
 
-Demo:https://www.linkedin.com/posts/sandip-sharma-0a7b98324_voicecloning-texttospeech-deeplearning-ugcPost-7446263735419297792-gEgC?utm_source=share&utm_medium=member_ios&rcm=ACoAAFILk38BbQv--mhT2lmnolKhkqoXrAor67k
+Demo:
 
 A complete voice cloning / multi-speaker text-to-speech (TTS) system that uses:
 
