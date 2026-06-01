@@ -21,10 +21,11 @@ function where the audio is processed and where the model is loaded. Additionall
 
 
 
-# second version  (or full_tts_gui_fixed_final_with_pause button )
+# second version  
 # Fixed: Added missing update_rec_label method
 #final version has all the features ......
-
+#this version fixes the random crashes that were happening due to poor exception handling 
+#Cross validated among macbook and linux systems and it works fine on both.
 import sys
 import os
 os.environ["QT_LOGGING_RULES"] = "*.warning=false;qt5ct.debug=false"
